@@ -32,6 +32,7 @@ public class ClienteDAO extends SQLiteOpenHelper{
                 " `email` TEXT " +
                 ")";
         db.execSQL(sql);
+        db.close();
     }
 
     @Override
@@ -44,18 +45,34 @@ public class ClienteDAO extends SQLiteOpenHelper{
         values.put ("nome", cliente.getNome());
         values.put("email", cliente.getEmail());
         db.insert(TBCLIENTE, null, values);
+        db.close();
     }
     public List<Cliente>all(){
         List<Cliente> clientes = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(TBCLIENTE, new String[]{"nome", "email"}, null,null,null,null, "nome ASC");
+        Cursor cursor = db.query(TBCLIENTE, new String[]{"id","nome", "email"}, null,null,null,null, "nome ASC");
 
         while (cursor.moveToNext()){
-            String nome = cursor.getString(0);
-            String email = cursor.getString(1);
-            clientes.add(new Cliente(nome, email));
+            int id = cursor.getInt(0);
+            String nome = cursor.getString(1);
+            String email = cursor.getString(2);
+            clientes.add(new Cliente(id, nome, email));
         }
+        db.close();
         return clientes;
+    }
+    public void delete (int id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TBCLIENTE, "id = ?", new String[]{String.valueOf(id)});
+        db.close();
+    }
+    public void update(Cliente cliente){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("nome",cliente.getNome());
+        cv.put("email",cliente.getEmail());
+        db.update(TBCLIENTE, cv, "id = ?", new String[]{String.valueOf(cliente.getId())});
+        db.close();
     }
 }

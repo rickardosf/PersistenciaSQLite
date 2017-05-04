@@ -10,7 +10,9 @@ public class CadastroAcivity extends AppCompatActivity {
 
     EditText edtNome;
     EditText edtEmail;
+    Cliente cliente;
     ClienteDAO clienteDAO;
+    boolean isUpdate = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,15 +23,30 @@ public class CadastroAcivity extends AppCompatActivity {
         edtEmail = (EditText)findViewById(R.id.edtEmail);
 
         clienteDAO = new ClienteDAO(this);
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null ) {
+            isUpdate = true;
+            cliente = (Cliente) getIntent().getExtras().get("cliente");
+            if (cliente != null) {
+                getSupportActionBar().setTitle(R.string.editar_cliente);
+                edtNome.setText(cliente.getNome());
+                edtEmail.setText(cliente.getEmail());
+            }
+        }
     }
 
     public void salvar(View view) {
         String nome = edtNome.getText().toString();
         String email = edtEmail.getText().toString();
-
-        Cliente cliente = new Cliente(nome, email);
-
-        clienteDAO.insert(cliente);
+        if (isUpdate) {
+            cliente.setNome(nome);
+            cliente.setEmail(email);
+            clienteDAO.update(cliente);
+        }else{
+            cliente = new Cliente(nome, email);
+            clienteDAO.insert(cliente);
+        }
         finish();
     }
 }

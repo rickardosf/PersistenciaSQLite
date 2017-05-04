@@ -15,7 +15,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".CadastroAcivity"></activity>
+        <activity android:name=".CadastroAcivity" />
+        <activity android:name=".VisualizarActivity"></activity>
     </application>
 
 </manifest>

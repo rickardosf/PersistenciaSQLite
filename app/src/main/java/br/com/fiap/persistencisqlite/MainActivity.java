@@ -7,15 +7,19 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     ClienteDAO clienteDAO;
     ListView lstClientes;
+    List<Cliente> clientes = new ArrayList<>();
 
 
     @Override
@@ -25,6 +29,15 @@ public class MainActivity extends AppCompatActivity {
 
         clienteDAO = new ClienteDAO(this);
         lstClientes = (ListView)findViewById(R.id.lstClientes);
+        lstClientes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Cliente cliente = clientes.get(position);
+                Intent it = new Intent(MainActivity.this, VisualizarActivity.class);
+                it.putExtra("cliente", cliente);
+                startActivity(it);
+            }
+        });
     }
 
     @Override
@@ -49,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
     public void atualizarLista(){
-        List<Cliente> clientes = clienteDAO.all();
+        clientes = clienteDAO.all();
         ArrayAdapter<Cliente> adapter = new ArrayAdapter<Cliente>(this, android.R.layout.simple_list_item_1, clientes);
         lstClientes.setAdapter(adapter);
     }

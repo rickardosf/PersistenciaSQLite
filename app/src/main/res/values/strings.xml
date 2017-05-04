@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">PersistenciSQLite</string>
     <string name="title_activity_cadastro">CadastroActivity</string>
+    <string name="editar">editar</string>
+    <string name="excluir">excluir</string>
+    <string name="editar_cliente">Editar Clienre</string>
 </resources>
